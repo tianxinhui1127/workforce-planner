@@ -45,9 +45,16 @@ const ActionPanel: React.FC = () => {
         const project = projects[projectKey];
         if (!project.enabled) return;
         
-        const projectType = PROJECT_TYPES[projectKey];
+        const resolvedTypeKey = project.type
+          ? project.type
+          : projectKey.startsWith('bridge_')
+            ? 'bridge'
+            : projectKey.startsWith('tunnel_')
+              ? 'tunnel'
+              : projectKey;
+        const projectType = PROJECT_TYPES[resolvedTypeKey];
         
-        projectType.modules.forEach(moduleName => {
+        Object.keys(project.modules).forEach(moduleName => {
           const module = project.modules[moduleName];
           
           // 检查该阶段是否有启用的工种类型
